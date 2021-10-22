@@ -21,12 +21,8 @@ public class NBTUtils
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 
         if(nmsStack.hasTag())
-        {
             if(nmsStack.getTag().hasKey("Level"))
-            {
                 return ((NBTTagLong) nmsStack.getTag().get("Level")).asLong();
-            }
-        }
 
         return -1L;
     }
