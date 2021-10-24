@@ -1,18 +1,14 @@
 package fr.eno.arcadequests.utils;
 
-import fr.eno.arcadequests.ArcadeQuests;
-import fr.eno.arcadequests.bosses.Bosses;
+import fr.eno.arcadequests.*;
+import fr.eno.arcadequests.bosses.*;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LightningStrike;
-import org.bukkit.entity.Player;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.bukkit.block.data.*;
+import org.bukkit.entity.*;
 
 public class StructureUtils
 {
-    public static void clearStructureAndSummon(Location location, World world, Player player)
+    public static void clearAutelStructureAndSummon(Location location, World world, Player player, Autel autel)
     {
         Location loca = location.clone().add(-1D, 1D, -1D);
 
@@ -38,13 +34,13 @@ public class StructureUtils
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(ArcadeQuests.getInstance(), () ->
         {
-            Bosses.CHICKEN.summonBoss(world, location.clone().add(0.5D, 0, 0.5D), player);
+            Bosses.getBoss(autel.getLevel()).summonBoss(world, location.clone().add(0.5D, 0, 0.5D), player);
             world.strikeLightningEffect(location);
         }, index);
 
     }
 
-    public static boolean checkStructure(Location location, World world, StructureInfo info)
+    public static boolean checkAutelStructure(Location location, World world, Autel info)
     {
         boolean isBased = checkBase(location, world, info);
         boolean hasTop = isType(world, location, info.getTop());
@@ -52,7 +48,7 @@ public class StructureUtils
         return isBased && hasTop && hasTopDeco;
     }
 
-    private static boolean checkBase(Location loc, World world, StructureInfo info)
+    private static boolean checkBase(Location loc, World world, Autel info)
     {
         Location location = loc.clone().subtract(1D, 1D, 1D);
 
@@ -75,6 +71,42 @@ public class StructureUtils
             }
 
         return true;
+    }
+
+    public static void summonPhantomAutel(Location loca, World world, Autel infos)
+    {
+        Location loc = Utils.toBlockLocation(loca);
+
+        createFallingBlock(world, loc.clone(), infos.getTop().createBlockData());
+        createFallingBlock(world, loc.clone().add(0, 1, 0), infos.getCornersDeco().createBlockData());
+
+        Location location = loc.clone().add(-1D, -1, -1D);
+
+        int index = 0;
+        for (int x = 0; x < 3; x++)
+            for (int z = 0; z < 3; z++)
+            {
+                Location l = new Location(world, location.getX() + (double) x, location.getBlockY(), location.getZ() + (double) z);
+
+                if(index == 0 || index == 2 || index == 6 || index == 8)
+                {
+                    createFallingBlock(world, l, infos.getCorners().createBlockData());
+                    createFallingBlock(world, l.clone().add(0, 1, 0), infos.getCornersDeco().createBlockData());
+                }
+                else
+                {
+                    createFallingBlock(world, l, infos.getBase().createBlockData());
+                }
+
+                index++;
+            }
+    }
+
+    private static void createFallingBlock(World world, Location loc, BlockData data)
+    {
+        FallingBlock fallingBlock = world.spawnFallingBlock(loc, data);
+        fallingBlock.setGravity(false);
+        fallingBlock.setDropItem(false);
     }
 
     private static boolean isType(World world, Location loc, Material type)

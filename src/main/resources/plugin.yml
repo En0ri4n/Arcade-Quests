@@ -1,5 +1,5 @@
 name: ArcadeQuests
-version: ${project.version}
+version: 1.0.0-ALPHA
 main: fr.eno.arcadequests.ArcadeQuests
 api-version: 1.17
 authors: [ En0ri4n ]

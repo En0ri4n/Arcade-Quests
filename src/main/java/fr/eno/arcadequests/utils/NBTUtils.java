@@ -7,7 +7,7 @@ import org.bukkit.inventory.*;
 
 public class NBTUtils
 {
-    public static ItemStack setLevelTag(ItemStack stack, long value)
+    public static ItemStack setTagLevel(ItemStack stack, long value)
     {
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
         NBTTagCompound stackCompound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -16,7 +16,7 @@ public class NBTUtils
         return CraftItemStack.asBukkitCopy(nmsStack);
     }
 
-    public static long getLevelTag(ItemStack stack)
+    public static long getTagLevel(ItemStack stack)
     {
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 

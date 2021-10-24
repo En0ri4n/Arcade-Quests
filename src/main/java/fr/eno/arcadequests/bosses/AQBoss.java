@@ -1,21 +1,17 @@
 package fr.eno.arcadequests.bosses;
 
-import fr.eno.arcadequests.utils.Utils;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.*;
+import org.bukkit.attribute.*;
 import org.bukkit.entity.*;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-public class AQBoss
+public abstract class AQBoss
 {
-    private final long level;
-    private final EntityType entityType;
-    private final double health;
-    private final double attackStrength;
-    private final double speed;
-    private final String name;
+    protected final long level;
+    protected final EntityType entityType;
+    protected final double health;
+    protected final double attackStrength;
+    protected final double speed;
+    protected final String name;
 
     public AQBoss(long level, EntityType entityType, double health, double attackStrength, double speed, String name)
     {
@@ -27,40 +23,19 @@ public class AQBoss
         this.name           = name;
     }
 
-    public Creature summonBoss(World world, Location location, Player invoker)
+    protected void setAttributeValue(LivingEntity entity, Attribute attribute, double value)
     {
-        Creature bossEntity = (Creature) world.spawnEntity(location, entityType);
-        bossEntity.setGlowing(true);
-        bossEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.health);
-        bossEntity.setHealth(this.health);
-        bossEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(this.speed);
-        bossEntity.addScoreboardTag("AQ_BOSS");
-        bossEntity.addScoreboardTag("LEVEL_" + this.level);
-        bossEntity.setPersistent(true);
-        bossEntity.setCustomName(name);
-        bossEntity.setCustomNameVisible(true);
+        AttributeInstance attributeInstance = entity.getAttribute(attribute);
 
-        Husk attacker = (Husk) world.spawnEntity(location, EntityType.HUSK);
-        attacker.setBaby();
-        attacker.setCustomName(name);
-        attacker.setCustomNameVisible(true);
-        attacker.addScoreboardTag("AQ_BOSS_PASSENGER");
-        attacker.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.health);
-        attacker.setHealth(this.health);
-        attacker.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(this.attackStrength);
-        attacker.setVisualFire(false);
-        attacker.setFireTicks(0);
-        attacker.setSilent(true);
-        attacker.setPersistent(true);
-        attacker.setInvisible(true);
-        attacker.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
-        attacker.setTarget(invoker);
+        if(attributeInstance != null)
+            attributeInstance.setBaseValue(value);
+    }
 
-        bossEntity.addPassenger(attacker);
+    public abstract Creature summonBoss(World world, Location location, Player invoker);
 
-        Utils.initializeBossBar(invoker, bossEntity, this.name);
-
-        return bossEntity;
+    public long getLevel()
+    {
+        return level;
     }
 
     private String getTag()

@@ -1,9 +1,6 @@
 package fr.eno.arcadequests.utils;
 
-import fr.eno.arcadequests.bosses.*;
 import org.bukkit.*;
-import org.bukkit.boss.*;
-import org.bukkit.entity.*;
 
 import java.util.*;
 
@@ -24,11 +21,8 @@ public class Utils
         return output;
     }
 
-    public static void initializeBossBar(Player player, Creature creature, String name)
+    public static Location toBlockLocation(Location loc)
     {
-        BossBar bar = Bukkit.createBossBar(name, BarColor.values()[random.nextInt(BarColor.values().length)], BarStyle.SOLID, BarFlag.PLAY_BOSS_MUSIC);
-        bar.addPlayer(player);
-        bar.setVisible(true);
-        BossManager.BossBarRunnable.runBossBar(bar, creature);
+        return new Location(loc.getWorld(), loc.getBlockX() + 0.5D, loc.getBlockY(), loc.getBlockZ() + 0.5D);
     }
 }
