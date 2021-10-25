@@ -6,6 +6,8 @@ import org.bukkit.entity.*;
 
 public abstract class AQBoss
 {
+    public static final String AQ_BOSS_TAG = "AQ_BOSS";
+
     protected final long level;
     protected final EntityType entityType;
     protected final double health;
