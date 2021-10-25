@@ -1,14 +1,15 @@
 package fr.eno.arcadequests.bosses;
 
+import fr.eno.arcadequests.*;
 import fr.eno.arcadequests.runnables.*;
 import net.minecraft.server.level.*;
-import net.minecraft.world.damagesource.*;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.*;
 import net.minecraft.world.entity.ai.goal.*;
 import org.apache.commons.lang.reflect.*;
 import org.bukkit.*;
 import org.bukkit.attribute.*;
+import org.bukkit.craftbukkit.v1_17_R1.*;
 import org.bukkit.craftbukkit.v1_17_R1.entity.*;
 import org.bukkit.entity.*;
 
@@ -87,7 +88,6 @@ public class AnimalBoss extends AQBoss
             if(var1 <= var3 && this.h())
             {
                 this.g();
-                entityLiving.damageEntity(DamageSource.mobAttack(this.a), (float) Objects.requireNonNull(this.a.getAttributeInstance(GenericAttributes.f)).getValue());
                 this.a.attackEntity(entityLiving);
             }
         }
@@ -102,7 +102,7 @@ public class AnimalBoss extends AQBoss
         @Override
         protected double a(EntityLiving var0)
         {
-            return 4.0F + var0.getWidth();
+            return 2F + var0.getWidth();
         }
     }
 }
