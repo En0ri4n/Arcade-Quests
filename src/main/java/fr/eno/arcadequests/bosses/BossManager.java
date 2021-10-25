@@ -23,7 +23,7 @@ public class BossManager implements Listener
             if(e.getEntity().getVehicle() != null) e.getEntity().getVehicle().remove();
             e.getDrops().clear();
             long level = NBTUtils.getLevel((Creature) e.getEntity());
-            e.getDrops().add(Autel.getSummonerItem(level + 1L).getSummonerItem());
+            e.getDrops().add(BossAutel.getSummoner(level + 1L).getSummonerItem());
             e.setDroppedExp(Math.toIntExact(level * 3L));
         }
     }
