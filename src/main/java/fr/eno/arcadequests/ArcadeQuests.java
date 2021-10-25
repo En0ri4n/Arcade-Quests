@@ -1,21 +1,33 @@
 package fr.eno.arcadequests;
 
-import fr.eno.arcadequests.bosses.BossManager;
-import fr.eno.arcadequests.listeners.PlayerListener;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
+import fr.eno.arcadequests.bosses.*;
+import fr.eno.arcadequests.commands.*;
+import fr.eno.arcadequests.listeners.*;
+import org.bukkit.*;
+import org.bukkit.event.*;
+import org.bukkit.plugin.java.*;
+
+import java.util.*;
 
 public class ArcadeQuests extends JavaPlugin
 {
     private static ArcadeQuests INSTANCE;
+    private final List<Listener> listeners = new ArrayList<>();
 
     @Override
     public void onEnable()
     {
         INSTANCE = this;
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), getInstance());
-        Bukkit.getPluginManager().registerEvents(new BossManager(), getInstance());
+        registerListeners();
+        listeners.forEach(listener -> Bukkit.getPluginManager().registerEvents(listener, getInstance()));
+        Bukkit.getPluginCommand("givesummoner").setExecutor(new GiveSummonerCommand());
+    }
+
+    private void registerListeners()
+    {
+        listeners.add(new PlayerListener());
+        listeners.add(new BossManager());
+        listeners.add(new BossListener());
     }
 
     @Override

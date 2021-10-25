@@ -1,5 +1,9 @@
-name: ArcadeQuests
+name: Arcade-Quests
 version: 1.0.0-ALPHA
 main: fr.eno.arcadequests.ArcadeQuests
 api-version: 1.17
 authors: [ En0ri4n ]
+commands:
+  givesummoner:
+    description: Give summoner with specified level to yourself
+    permission: arcadequests.command.givesummoner

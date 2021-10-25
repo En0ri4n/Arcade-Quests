@@ -7,9 +7,10 @@ import org.bukkit.inventory.meta.*;
 
 import java.util.*;
 
-public enum Autel
+public enum BossAutel
 {
-    BASE(0L, Material.BOWL, Material.COBBLESTONE, Material.OAK_PLANKS, Material.GRANITE, Material.TORCH);
+    BASE(0L, Material.WOODEN_SWORD, Material.COBBLESTONE, Material.OAK_PLANKS, Material.GRANITE, Material.TORCH),
+    BASE_1(1L, Material.BLAZE_POWDER, Material.ACACIA_WOOD, Material.COAL_BLOCK, Material.COPPER_ORE, Material.FLOWER_POT);
 
     private final long level;
     private final Material summoner;
@@ -18,7 +19,7 @@ public enum Autel
     private final Material top;
     private final Material cornersDeco;
 
-    Autel(long level, Material summoner, Material base, Material corners, Material top, Material cornersDeco)
+    BossAutel(long level, Material summoner, Material base, Material corners, Material top, Material cornersDeco)
     {
         this.level = level;
         this.summoner = summoner;
@@ -51,14 +52,14 @@ public enum Autel
         return NBTUtils.setTagLevel(stack, this.getLevel());
     }
 
-    public static Autel getSummonerItem(long level)
+    public static BossAutel getSummoner(long level)
     {
-        for(Autel autel : Autel.values())
+        for(BossAutel autel : BossAutel.values())
         {
             if(level == autel.getLevel()) return autel;
         }
 
-        return null;
+        return BossAutel.BASE;
     }
 
     public static boolean isSummonerItem(ItemStack stack)
@@ -67,9 +68,9 @@ public enum Autel
     }
 
 
-    public static Autel getSummoner(ItemStack stack)
+    public static BossAutel getSummoner(ItemStack stack)
     {
-        return getSummonerItem(NBTUtils.getTagLevel(stack));
+        return getSummoner(NBTUtils.getTagLevel(stack));
     }
 
     public Material getBase()

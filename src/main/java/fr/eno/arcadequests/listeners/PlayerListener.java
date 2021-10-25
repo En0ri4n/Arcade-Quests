@@ -14,41 +14,39 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onClick(PlayerInteractEvent e)
     {
-        if(e.hasItem() && Autel.isSummonerItem(e.getItem()))
+        if(e.hasItem() && BossAutel.isSummonerItem(e.getItem()))
         {
             Player player = e.getPlayer();
-            Autel autel = Autel.getSummoner(e.getItem());
+            BossAutel autel = BossAutel.getSummoner(e.getItem());
 
             e.setCancelled(true);
 
-            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && player.isSneaking())
+            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
             {
-                Location baseLoc = Objects.requireNonNull(e.getClickedBlock()).getLocation();
-                Location loc = baseLoc.clone().add(-1, 1, -1);
-
-                boolean canBuild = true;
-
-                for(int x = 0; x < 3; x++)
-                    for(int y = 0; y < 3; y++)
-                        for(int z = 0; z < 3; z++)
-                            if(!player.getWorld().getBlockAt(loc.clone().add(x, y, z)).getType().equals(Material.AIR))
-                            {
-                                canBuild = false;
-                                break;
-                            }
-
-                if(canBuild)
-                    StructureUtils.summonPhantomAutel(baseLoc.add(0, 2, 0), e.getPlayer().getWorld(), autel);
-            }
-            else if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-            {
-                Location loc = Objects.requireNonNull(e.getClickedBlock()).getLocation();
                 World world = player.getWorld();
+                Location baseLoc = Objects.requireNonNull(e.getClickedBlock()).getLocation();
 
-                if(StructureUtils.checkAutelStructure(loc, world, autel))
+                if(player.isSneaking())
+                {
+                    if(StructureUtils.checkSpace(world, baseLoc))
+                        StructureUtils.summonGhostAutel(e.getPlayer(), baseLoc.clone().add(0, 2, 0), autel);
+
+                    return;
+                }
+
+                if(StructureUtils.checkAutelStructure(baseLoc, world, autel))
                 {
                     Objects.requireNonNull(e.getItem()).setAmount(e.getItem().getAmount() - 1);
-                    StructureUtils.clearAutelStructureAndSummon(loc, world, player, autel);
+                    StructureUtils.clearAutelStructureAndSummon(baseLoc, world, player, autel);
+                }
+            }
+            else if(e.getAction().equals(Action.LEFT_CLICK_BLOCK))
+            {
+                Location baseLoc = Objects.requireNonNull(e.getClickedBlock()).getLocation();
+
+                if(player.isSneaking() && player.isOp())
+                {
+                    StructureUtils.buildAutel(player, baseLoc.clone().add(0, 2, 0), autel);
                 }
             }
         }
@@ -57,6 +55,6 @@ public class PlayerListener implements Listener
     @EventHandler
     public void on(PlayerEggThrowEvent e)
     {
-        e.getPlayer().getWorld().getEntities().stream().filter(entity -> entity instanceof FallingBlock).forEach(fallingBlock -> fallingBlock.remove());
+        e.getPlayer().getWorld().getEntities().stream().filter(entity -> entity instanceof FallingBlock).forEach(Entity::remove);
     }
 }
