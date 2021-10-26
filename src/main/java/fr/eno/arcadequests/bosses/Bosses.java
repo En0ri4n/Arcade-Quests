@@ -22,7 +22,7 @@ public class Bosses
 
     static
     {
-        addBoss(new AnimalBoss(0L, EntityType.CHICKEN, 10D, 1D, 0.2526424716574525D, ChatColor.YELLOW + "Crazy Chicken"));
-        addBoss(new AnimalBoss(1L, EntityType.COW, 30D, 5D, 0.3000000005485398D, ChatColor.GOLD + "Angry Cow"));
+        addBoss(new AnimalBoss(0L, EntityType.CHICKEN, 10D, 1D, 0.315468745D, ChatColor.YELLOW + "Crazy Chicken"));
+        addBoss(new AnimalBoss(1L, EntityType.COW, 30D, 5D, 0.343248554D, ChatColor.GOLD + "Angry Cow"));
     }
 }
